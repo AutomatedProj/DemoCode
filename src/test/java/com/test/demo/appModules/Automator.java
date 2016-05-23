@@ -68,6 +68,28 @@ public class Automator {
 		// switch to main window
 		driver.switchTo().window(mainWindow);
 	}
+	/**
+     * highlightElement method is basically used to highlight the element during 
+      * the current execution with a yellow background and a border of 2px red 
+      * and after five second that highlight things toggles back to its original
+     * state.
+     * 
+      * @param driver
+     *            Selenium Webdriver reference
+     * 
+      * @param element
+     *            UI element reference
+     */
+     public static void highlightElement(WebDriver driver ,WebElement element){
+           JavascriptExecutor js = (JavascriptExecutor)driver;
+           js.executeScript("arguments[0].setAttribute('style' ,'background: yellow;border:2px solid red')", element);
+           try{
+                 Thread.sleep(1000);
+           }catch(Exception e){
+           }
+           js.executeScript("arguments[0].setAttribute('style' ,'border: inherit;')", element);
+     }
+
 
 	/**
 	 * Method processAction is used to process the actions on the UI, which is
@@ -146,6 +168,7 @@ public class Automator {
 			builder.moveToElement(element);
 			break;
 		case "exists":
+			highlightElement(driver,element);
 			if (!(element.isDisplayed())) {
 				throw new Exception("Does not exist");
 			}

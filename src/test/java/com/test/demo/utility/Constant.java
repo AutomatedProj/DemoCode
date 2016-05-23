@@ -8,7 +8,6 @@ import com.test.demo.automationFramework.TestSuiteMain;
  * @version 1.0
  */
 public class Constant {
-
 	// provide the path for the spreadsheet
 	public static final String PATH_TESTDATA = "src/test/java/testData/";
 	// provide the name of the spreadsheet
