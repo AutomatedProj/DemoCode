@@ -90,9 +90,29 @@ public class TestSuiteMain {
 				System.out.println(ExcelUtils.getCellData(i, 0));
 				WebElement element = Automator.findElement(driver, ExcelUtils.getCellData(i, 2), LocalObjectRepo);
 				switch (ExcelUtils.getCellData(i, 1)) {
-				case "verifyOverallStatus":
+				case "takeScreenshot":
+					String msg = "The screenshot of the required message/information is taken";
+					System.out.println(msg);
+					ExcelUtils.setCellData("Passed", i, 5);
+					path = Automator.captureScreenShot(driver);
+					test.log(LogStatus.INFO, "Snapshot below: " + test.addScreenCapture(path));
+					test.log(LogStatus.PASS, ExcelUtils.getCellData(i, 0) + " " + ExcelUtils.getCellData(i, 1)
+							+ " - Message: " + msg, "Passed");
+					i++;
+					break;
+				case "verifyCountOfErrorDivs":
 					j = i;
-					i += TestCase1.checkTheContentOfDropDown(driver, element, ExcelUtils.getCellData(i, 1),
+					i += TestCase1.verifyCountOfErrorDivs(driver, element, ExcelUtils.getCellData(i, 1),
+							ExcelUtils.getCellData(i, 4), j, test);
+					break;
+				case "clickRadioButtonWithGivenValue":
+					j = i;
+					i += TestCase1.clickRadioButtonWithGivenValue(driver, element, ExcelUtils.getCellData(i, 1),
+							ExcelUtils.getCellData(i, 4), j, test);
+					break;
+				case "clickCheckboxWithGivenValue":
+					j = i;
+					i += TestCase1.clickCheckboxWithGivenValue(driver, element, ExcelUtils.getCellData(i, 1),
 							ExcelUtils.getCellData(i, 4), j, test);
 					break;
 				default:
@@ -217,6 +237,7 @@ public class TestSuiteMain {
 		}
 		// Path for Chrome Driver
 		String CHROME_DRIVER_PATH = Utility.class.getClassLoader().getResource("chromedriver.exe").getFile();
+		CHROME_DRIVER_PATH = CHROME_DRIVER_PATH.replace("%20", " ");
 		// Set path for Chrome driver and Create a new Chrome WebDriver
 		System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
 		driver = new ChromeDriver();
@@ -340,7 +361,7 @@ public class TestSuiteMain {
 	 *             if tests raise any exception due to an issue
 	 */
 
-	@Test(description = "Test Case 2", priority = 2,enabled=false)
+	@Test(description = "Test Case 2", priority = 2,enabled = false)
 	public static void testCase2() throws Exception {
 		TestCaseName = "Test Case 2";
 
@@ -361,7 +382,7 @@ public class TestSuiteMain {
 	 *             if tests raise any exception due to an issue
 	 */
 
-	@Test(description = "Test Case 3", priority = 3,enabled=false)
+	@Test(description = "Test Case 3", priority = 3,enabled = false)
 	public static void testCase3() throws Exception {
 		TestCaseName = "Test Case 3";
 

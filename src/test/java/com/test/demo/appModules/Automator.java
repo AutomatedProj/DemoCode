@@ -68,28 +68,28 @@ public class Automator {
 		// switch to main window
 		driver.switchTo().window(mainWindow);
 	}
-	/**
-     * highlightElement method is basically used to highlight the element during 
-      * the current execution with a yellow background and a border of 2px red 
-      * and after five second that highlight things toggles back to its original
-     * state.
-     * 
-      * @param driver
-     *            Selenium Webdriver reference
-     * 
-      * @param element
-     *            UI element reference
-     */
-     public static void highlightElement(WebDriver driver ,WebElement element){
-           JavascriptExecutor js = (JavascriptExecutor)driver;
-           js.executeScript("arguments[0].setAttribute('style' ,'background: yellow;border:2px solid red')", element);
-           try{
-                 Thread.sleep(1000);
-           }catch(Exception e){
-           }
-           js.executeScript("arguments[0].setAttribute('style' ,'border: inherit;')", element);
-     }
 
+	/**
+	 * highlightElement method is basically used to highlight the element during
+	 * the current execution with a yellow background and a border of 2px red
+	 * and after five second that highlight things toggles back to its original
+	 * state.
+	 * 
+	 * @param driver
+	 *            Selenium Webdriver reference
+	 * 
+	 * @param element
+	 *            UI element reference
+	 */
+	public static void highlightElement(WebDriver driver, WebElement element) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].setAttribute('style' ,'background: yellow;border:2px solid red')", element);
+		try {
+			Thread.sleep(1000);
+		} catch (Exception e) {
+		}
+		js.executeScript("arguments[0].setAttribute('style' ,'border: inherit;')", element);
+	}
 
 	/**
 	 * Method processAction is used to process the actions on the UI, which is
@@ -111,9 +111,9 @@ public class Automator {
 	 */
 	public static void processAction(WebDriver driver, WebElement element, String action, String value)
 			throws Exception {
-
 		switch (action) {
 		case "Enter":
+			highlightElement(driver, element);
 			if (value.equals("ENTER")) {
 				element.sendKeys(Keys.ENTER);
 				return;
@@ -126,9 +126,11 @@ public class Automator {
 			Runtime.getRuntime().exec(PATH_AUTOIT);
 			break;
 		case "click":
+			highlightElement(driver, element);
 			element.click();
 			break;
 		case "clear":
+			highlightElement(driver, element);
 			element.clear();
 			break;
 		case "close":
@@ -140,7 +142,8 @@ public class Automator {
 		case "navigate":
 			driver.navigate().to(Constant.BASEURL + value);
 			break;
-		case "select":
+		case "selectValue":
+			highlightElement(driver, element);
 			new Select(element).selectByVisibleText(value);
 			break;
 		case "get":
@@ -154,49 +157,65 @@ public class Automator {
 			}
 			break;
 		case "verify":
+			highlightElement(driver, element);
 			if (!value.equals(element.getText())) {
-				throw new Exception("Does not match");
+				throw new Exception("Does not match - Expected: " + value + " Observed: " + element.getText());
 			}
 			break;
 		case "verifyPartialText":
+			highlightElement(driver, element);
 			if (!element.getText().contains(value)) {
 				throw new Exception("Does not match");
 			}
 			break;
+		case "verifyValue":
+			highlightElement(driver, element);
+			if (!value.equals(element.getAttribute("value"))) {
+				throw new Exception(
+						"Value does not match - Expected: " + value + " Observed: " + element.getAttribute("value"));
+			}
+			break;
 		case "move":
+			highlightElement(driver, element);
 			Actions builder = new Actions(driver);
 			builder.moveToElement(element);
 			break;
 		case "exists":
-			highlightElement(driver,element);
+			highlightElement(driver, element);
 			if (!(element.isDisplayed())) {
 				throw new Exception("Does not exist");
 			}
 			break;
 		case "isEnabled":
+			highlightElement(driver, element);
 			if (!(element.isEnabled())) {
 				throw new Exception("Does not exist");
 			}
 			break;
 		case "isDisabled":
+			highlightElement(driver, element);
 			if (element.isEnabled())
 				throw new Exception("The element should be disabled.");
 			break;
 		case "isAriaDisabled":
+			highlightElement(driver, element);
 			if (element.getAttribute("aria-disabled") == null) {
 				throw new Exception("The element should be disabled.");
 			}
 			break;
 		case "isAriaEnabled":
+			highlightElement(driver, element);
 			if (!(element.getAttribute("aria-disabled") == null)) {
 				throw new Exception("The element should be enabled");
 			}
 			break;
 		case "hover":
+			highlightElement(driver, element);
 			builder = new Actions(driver);
 			builder.moveToElement(element).build().perform();
 			break;
 		case "contains":
+			highlightElement(driver, element);
 			Assert.assertTrue(element.getText().toLowerCase().contains(value.toLowerCase()));
 			break;
 		case "refresh":
@@ -244,25 +263,8 @@ public class Automator {
 				throw new Exception("Download file failed");
 			}
 			break;
-		case "verifyValue":
-			/*
-			 * Just for Shell Features as otherwise it was giving a stale
-			 * element reference for this element
-			 */
-			element = driver.findElement(By.id("WD54"));
-			Assert.assertEquals(value, element.getAttribute("value"));
-			break;
-		case "checkDataCenter":
-			/*
-			 * Just for checking if no scope is selected then the script should
-			 * fail.
-			 */
-			List<WebElement> ele = findElements(driver, value, TestSuiteMain.LocalObjectRepo);
-			if (!(ele.size() > 1)) {
-				throw new Exception("No scope selection defined");
-			}
-			break;
 		case "clickAndHold":
+			highlightElement(driver, element);
 			String val[] = value.split(",");
 			builder = new Actions(driver);
 			builder.clickAndHold(element);
@@ -345,7 +347,7 @@ public class Automator {
 			return driver.findElement(By.cssSelector(values[1]));
 		}
 		if ("xpath".equals(values[0])) {
-			WebElement ele = new WebDriverWait(driver, 10) // 1 minute until
+			WebElement ele = new WebDriverWait(driver, 10) // 10 seconds until
 															// present
 					.until(ExpectedConditions.presenceOfElementLocated(By.xpath(values[1])));
 			return ele;
@@ -394,7 +396,7 @@ public class Automator {
 			return driver.findElements(By.cssSelector(values[1]));
 		}
 		if ("xpath".equals(values[0])) {
-			List<WebElement> ele = new WebDriverWait(driver, 60) // 1 minute
+			List<WebElement> ele = new WebDriverWait(driver, 10) // 10 seconds
 																	// until
 					// present
 					.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(values[1])));
@@ -407,7 +409,8 @@ public class Automator {
 	/**
 	 * captureScreenShot is used to capture a screenshot of the current screen
 	 * 
-	 * @param driver Is the Selenium Webdriver instance
+	 * @param driver
+	 *            Is the Selenium Webdriver instance
 	 * 
 	 */
 	public static String captureScreenShot(WebDriver driver) {

@@ -8,6 +8,7 @@ import com.test.demo.automationFramework.TestSuiteMain;
  * @version 1.0
  */
 public class Constant {
+
 	// provide the path for the spreadsheet
 	public static final String PATH_TESTDATA = "src/test/java/testData/";
 	// provide the name of the spreadsheet
@@ -19,5 +20,5 @@ public class Constant {
 			+ TestSuiteMain.date + "\\Screenshots\\screenshot";
 	// Path for creating the log file
 	public static final String PATH_LOGFILE = "C:\\ExtentReportsOutput\\DEMO\\DEMOtestreport" + TestSuiteMain.date
-			+ "\\DEMOLogFile.txt";
+			+ "\\DEMOLogFile.html";
 }
