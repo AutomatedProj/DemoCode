@@ -304,6 +304,13 @@ public class Automator {
 		case "maximizeWindow":
 			driver.manage().window().maximize();
 			break;
+		case "dragNDropByOffset":
+			String offset[] = value.split(",");
+			int xOffset = Integer.parseInt(offset[0]);
+			int yOffset = Integer.parseInt(offset[1]);
+			builder = new Actions(driver);
+			builder.dragAndDropBy(element, xOffset, yOffset).perform();;
+			break;
 		default:
 			throw new Exception("No Action to be processed");
 		}

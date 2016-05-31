@@ -115,6 +115,16 @@ public class TestSuiteMain {
 					i += TestCase1.clickCheckboxWithGivenValue(driver, element, ExcelUtils.getCellData(i, 1),
 							ExcelUtils.getCellData(i, 4), j, test);
 					break;
+				case "dragNDrop":
+					j = i;
+					i += TestCase1.dragNDrop(driver, element, ExcelUtils.getCellData(i, 1),
+							ExcelUtils.getCellData(i, 4), j, test);
+					break;
+				case "selectFromDropDwnClick":
+					j = i;
+					i += TestCase1.selectFromDropDwnClick(driver, element, ExcelUtils.getCellData(i, 1),
+							ExcelUtils.getCellData(i, 4), j, test);
+					break;
 				default:
 					Automator.processAction(driver, element, ExcelUtils.getCellData(i, 1),
 							ExcelUtils.getCellData(i, 4));
@@ -258,7 +268,7 @@ public class TestSuiteMain {
 
 		// writing everything to document
 		extent.flush();
-		driver.quit();
+		//driver.quit();
 
 		String StringToWrite = "";
 		if (flag % 2 == 1) {

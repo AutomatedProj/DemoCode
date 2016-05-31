@@ -11,6 +11,8 @@ import com.test.demo.appModules.Automator;
 import com.test.demo.automationFramework.TestSuiteMain;
 import com.test.demo.utility.ExcelUtils;
 import com.test.demo.utility.ReportWriting;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 
 /**
  * The class contains all the methods which deals with the ChooseView test case.
@@ -236,5 +238,126 @@ public class TestCase1 {
 			ReportWriting.writeToReport(driver, obj, count, step, test, substeps, e, path);
 		}
 		return 3;
+	}
+	/**
+	 * dragNDrop method basically deals with the DragNDrop operation which click
+	 * and hold one element and drops that element in the destination container.
+	 * 
+	 * @param driver
+	 *            Selenium Webdriver reference
+	 * 
+	 * @param element
+	 *            UI element reference
+	 * 
+	 * @param action
+	 *            The action like click, Enter etc.
+	 * 
+	 * @param value
+	 *            Value to be passed for navigate or enter in a input field
+	 * 
+	 * @param count
+	 *            Count specify the step when this function is called
+	 * 
+	 * @param test
+	 *            test is the reference to the ExtentTest test that is running
+	 *            the test to generate the report
+	 * @return returns the number of the test cases of the composite test cases.
+	 * 
+	 */
+	public static int dragNDrop(WebDriver driver, WebElement element, String action, String value, int count,
+			ExtentTest test) {
+		int step = count;
+		int substeps = 1;
+		String obj[] = new String[substeps+1];
+		int cntr=-1;
+		String path = "";
+		try {
+			obj[++cntr] = "";
+			if (!ExcelUtils.getCellData(step, 2).isEmpty()) {
+				obj[cntr] = " Object:- " + ExcelUtils.getCellData(step, 2);
+			}
+
+			System.out.println(++step);
+			obj[++cntr] = "";
+			if (!ExcelUtils.getCellData(step, 2).isEmpty()) {
+				obj[cntr] = " Object:- " + ExcelUtils.getCellData(step, 2);
+			}
+			WebElement destination = Automator.findElement(driver, ExcelUtils.getCellData(step, 2),
+					TestSuiteMain.LocalObjectRepo);
+			Actions builder = new Actions(driver);
+			builder.dragAndDrop(element, destination).perform();
+			++step;
+			ReportWriting.writeToReport(driver, obj, count, step, test, substeps, null, path);
+		} catch (Exception e) {
+			TestSuiteMain.failedStep++;
+			path = Automator.captureScreenShot(driver);
+			ReportWriting.writeToReport(driver, obj, count, step, test, substeps, e, path);
+		}
+		return 2;
+	}
+	/**
+	 * selectFromDropDwnClick Method is basically used for selecting the values
+	 * from the drop down.And the values are fetched from the excel file.
+	 * 
+	 * @param driver
+	 *            Selenium Webdriver reference
+	 * 
+	 * @param element
+	 *            UI element reference
+	 * 
+	 * @param action
+	 *            The action like click, Enter etc.
+	 * 
+	 * @param value
+	 *            Value to be passed for navigate or enter in a input field
+	 * 
+	 * @param count
+	 *            Count specify the step when this function is called
+	 * 
+	 * @param test
+	 *            test is the reference to the ExtentTest test that is running
+	 *            the test to generate the report
+	 * 
+	 * @return This method return the no of the sub-steps are for this composite
+	 *         testcase
+	 * 
+	 */
+
+	public static int selectFromDropDwnClick(WebDriver driver, WebElement element, String action, String value,
+			int count, ExtentTest test) throws Exception {
+		int step = count;
+		String path = "";
+		int substeps = 0;
+		String obj[] = new String[substeps + 1];
+		int cntr = -1;
+		try {
+
+			int flag = 0;
+			List<WebElement> ele = element.findElements(By.xpath(".//li"));
+			for (WebElement elem : ele) {
+				String time = elem.getAttribute("innerText");
+				if (time.contains(value)) {
+					flag = 1;
+					Automator.processAction(driver, elem, "click", value);
+					break;
+				}
+			}
+			if (flag == 1) {
+				obj[++cntr] = "";
+				if (!ExcelUtils.getCellData(step, 2).isEmpty()) {
+					obj[cntr] = " Object:- " + ExcelUtils.getCellData(step, 2);
+				}
+				++step;
+				ReportWriting.writeToReport(driver, obj, count, step, test, substeps, null, "");
+
+			} else {
+				throw new Exception(".The specified value is not there in the list:");
+			}
+		} catch (Exception e) {
+			TestSuiteMain.failedStep++;
+			path = Automator.captureScreenShot(driver);
+			ReportWriting.writeToReport(driver, obj, count, step, test, substeps, e, path);
+		}
+		return 1;
 	}
 }
