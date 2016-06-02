@@ -1,5 +1,8 @@
 package com.test.demo.appModules;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -239,6 +242,7 @@ public class TestCase1 {
 		}
 		return 3;
 	}
+
 	/**
 	 * dragNDrop method basically deals with the DragNDrop operation which click
 	 * and hold one element and drops that element in the destination container.
@@ -268,8 +272,8 @@ public class TestCase1 {
 			ExtentTest test) {
 		int step = count;
 		int substeps = 1;
-		String obj[] = new String[substeps+1];
-		int cntr=-1;
+		String obj[] = new String[substeps + 1];
+		int cntr = -1;
 		String path = "";
 		try {
 			obj[++cntr] = "";
@@ -295,6 +299,7 @@ public class TestCase1 {
 		}
 		return 2;
 	}
+
 	/**
 	 * selectFromDropDwnClick Method is basically used for selecting the values
 	 * from the drop down.And the values are fetched from the excel file.
@@ -352,6 +357,69 @@ public class TestCase1 {
 
 			} else {
 				throw new Exception(".The specified value is not there in the list:");
+			}
+		} catch (Exception e) {
+			TestSuiteMain.failedStep++;
+			path = Automator.captureScreenShot(driver);
+			ReportWriting.writeToReport(driver, obj, count, step, test, substeps, e, path);
+		}
+		return 1;
+	}
+
+	/**
+	 * validateDatePickedmethod basically checks whether the date in the
+	 * provided input is 15 of next month or not.
+	 * 
+	 * @param driver
+	 *            Selenium Webdriver reference
+	 * 
+	 * @param element
+	 *            UI element reference
+	 * 
+	 * @param action
+	 *            The action like click, Enter etc.
+	 * 
+	 * @param value
+	 *            Value to be passed for navigate or enter in a input field
+	 * 
+	 * @param count
+	 *            Count specify the step when this function is called
+	 * 
+	 * @param test
+	 *            test is the reference to the ExtentTest test that is running
+	 *            the test to generate the report
+	 * 
+	 * @return This method return the no of the sub-steps are for this composite
+	 *         testcase
+	 * 
+	 */
+
+	public static int validateDatePicked(WebDriver driver, WebElement element, String action, String value, int count,
+			ExtentTest test) throws Exception {
+		int step = count;
+		String path = "";
+		int substeps = 0;
+		String obj[] = new String[substeps + 1];
+		int cntr = -1;
+		try {
+
+			String datefetched = element.getAttribute("value");
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH,15);
+			calendar.add(Calendar.MONTH,1);
+			Date date = calendar.getTime();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			String dateCalculated = dateFormat.format(date);
+			if (datefetched.equals(dateCalculated)) {
+				obj[++cntr] = "";
+				if (!ExcelUtils.getCellData(step, 2).isEmpty()) {
+					obj[cntr] = " Object:- " + ExcelUtils.getCellData(step, 2);
+				}
+				++step;
+				ReportWriting.writeToReport(driver, obj, count, step, test, substeps, null, "");
+
+			} else {
+				throw new Exception("The correct date is not picked!!!");
 			}
 		} catch (Exception e) {
 			TestSuiteMain.failedStep++;

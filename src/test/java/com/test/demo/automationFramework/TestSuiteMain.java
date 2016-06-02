@@ -125,6 +125,11 @@ public class TestSuiteMain {
 					i += TestCase1.selectFromDropDwnClick(driver, element, ExcelUtils.getCellData(i, 1),
 							ExcelUtils.getCellData(i, 4), j, test);
 					break;
+				case "validateDatePicked":
+					j = i;
+					i += TestCase1.validateDatePicked(driver, element, ExcelUtils.getCellData(i, 1),
+							ExcelUtils.getCellData(i, 4), j, test);
+					break;
 				default:
 					Automator.processAction(driver, element, ExcelUtils.getCellData(i, 1),
 							ExcelUtils.getCellData(i, 4));
