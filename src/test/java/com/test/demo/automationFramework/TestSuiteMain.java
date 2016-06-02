@@ -96,8 +96,9 @@ public class TestSuiteMain {
 					ExcelUtils.setCellData("Passed", i, 5);
 					path = Automator.captureScreenShot(driver);
 					test.log(LogStatus.INFO, "Snapshot below: " + test.addScreenCapture(path));
-					test.log(LogStatus.PASS, ExcelUtils.getCellData(i, 0) + " " + ExcelUtils.getCellData(i, 1)
-							+ " - Message: " + msg, "Passed");
+					test.log(LogStatus.PASS,
+							ExcelUtils.getCellData(i, 0) + " " + ExcelUtils.getCellData(i, 1) + " - Message: " + msg,
+							"Passed");
 					i++;
 					break;
 				case "verifyCountOfErrorDivs":
@@ -213,8 +214,8 @@ public class TestSuiteMain {
 		date = date.replace(' ', '_');
 		date = date.replace(':', '_');
 		extent = new ExtentReports(
-				"C:\\ExtentReportsOutput\\DEMO\\DEMOtestreport" + date + "\\testreportDEMO" + date + ".html",
-				false, DisplayOrder.NEWEST_FIRST, NetworkMode.OFFLINE);
+				"C:\\ExtentReportsOutput\\DEMO\\DEMOtestreport" + date + "\\testreportDEMO" + date + ".html", false,
+				DisplayOrder.NEWEST_FIRST, NetworkMode.OFFLINE);
 		openLogFile();
 	}
 
@@ -283,7 +284,7 @@ public class TestSuiteMain {
 					+ "</td><td style=\" padding: 5px;text-align: left;border: 2px inset black;border-collapse: collapse;\">"
 					+ failedStep
 					+ "</td><td style=\" padding: 5px;text-align: left;border: 2px inset black;border-collapse: collapse;\">"
-					+ TotalStep + "</td></tr>";
+					+ (TotalStep == 0 ? TotalStep + "*" : TotalStep) + "</td></tr>";
 		} else {
 			StringToWrite = "<tr style=\"background: #BCAAA4;color:#ffffff\">"
 					+ "<td style=\" padding: 5px;text-align: left;border: 2px inset black;border-collapse: collapse;\">"
@@ -291,7 +292,7 @@ public class TestSuiteMain {
 					+ "</td><td style=\" padding: 5px;text-align: left;border: 2px inset black;border-collapse: collapse;\">"
 					+ failedStep
 					+ "</td><td style=\" padding: 5px;text-align: left;border: 2px inset black;border-collapse: collapse;\">"
-					+ TotalStep + "</td></tr>";
+					+ (TotalStep == 0 ? TotalStep + "*" : TotalStep) + "</td></tr>";
 		}
 
 		byte data[] = StringToWrite.getBytes();
