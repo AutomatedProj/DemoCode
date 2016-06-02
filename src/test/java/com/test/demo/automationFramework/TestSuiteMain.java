@@ -273,7 +273,7 @@ public class TestSuiteMain {
 
 		// writing everything to document
 		extent.flush();
-		//driver.quit();
+		driver.quit();
 
 		String StringToWrite = "";
 		if (flag % 2 == 1) {
@@ -376,7 +376,7 @@ public class TestSuiteMain {
 	 *             if tests raise any exception due to an issue
 	 */
 
-	@Test(description = "Test Case 2", priority = 2,enabled = false)
+	@Test(description = "Test Case 2", priority = 2)
 	public static void testCase2() throws Exception {
 		TestCaseName = "Test Case 2";
 
@@ -397,7 +397,7 @@ public class TestSuiteMain {
 	 *             if tests raise any exception due to an issue
 	 */
 
-	@Test(description = "Test Case 3", priority = 3,enabled = false)
+	@Test(description = "Test Case 3", priority = 3)
 	public static void testCase3() throws Exception {
 		TestCaseName = "Test Case 3";
 
